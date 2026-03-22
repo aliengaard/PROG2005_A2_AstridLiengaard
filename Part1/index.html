@@ -1,1 +1,61 @@
+<!--Author: Astrid Liengaard Nielsen 
+    Student ID: 25037591
+    Assessment 2: Part 1-->
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Harvey Norman Inventory</h1>
+    </header>
+    <main>
+        <div id="feedbackDisplay"></div>
+        <!-- Section where new items can be added. 
+         Including all fields and a button adding the item-->
+        <section id ="formSection">
+            <input type="text" id="itemId" placeholder="Item ID (Unique)">
+            <input type="text" id="itemName" placeholder="Product Name">
+            <select id="category">
+                <option value="Electronics">Electronics</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Tools">Tools</option>
+            </select>
+            <input type="number" id="quantity" placeholder="Quantity">
+            <input type="number" id="price" placeholder="Price">
+            <input type="text" id="supplierName" placeholder="Supplier">
+            <select id="stockStatus">
+                <option value="In Stock">In Stock</option>
+                <option value="Low Stock">Low Stock</option>
+            </select>
+            <select id="popularItem">
+                <option value="No">Popular: No</option>
+                <option value="Yes">Popular: Yes</option>
+            </select>
+            <textarea id="comment" placeholder="Comments"></textarea>
+            
+            <button id="addBtn">Add to Inventory</button> 
+        </section>
+        
+        <hr>
+        <!-- Section for searching inventory items -->
+        <section id="search-section">
+            <input type="text" id="searchInput" placeholder="Search by name...">
+            <button id="searchBtn">Search</button>
+        </section>
+
+        <!-- Section for displaying the list of inventory items-->
+        <section id="display-section">
+            <h2>Current Inventory</h2>
+            <div id="inventoryOutput">
+                </div>
+        </section>
+    </main>
+</body>
+    <script src="app.js"></script>
+</html>
