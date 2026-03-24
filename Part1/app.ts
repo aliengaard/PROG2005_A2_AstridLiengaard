@@ -93,6 +93,28 @@ addBtn.addEventListener('click', () => {
     }
 };
 
+// Function for deleting an item from the list
+function deleteItem(id: string) {
+    inventory = inventory.filter(item => item.itemId !== id);
+    displayInventoryList();
+    document.getElementById('feedbackDisplay')!.innerHTML = "<p style='color: orange;'>Item deleted.</p>";
+}
+
+// Function for preparing an item for an update (filling the fields with the existing data, making it editable)
+function prepareUpdate(id: string) {
+    const item = inventory.find(i => i.itemId === id);
+    if (item) {
+        (document.getElementById('itemId') as HTMLInputElement).value = item.itemId;
+        (document.getElementById('itemName') as HTMLInputElement).value = item.itemName;
+        (document.getElementById('price') as HTMLInputElement).value = item.price.toString();
+        (document.getElementById('quantity') as HTMLInputElement).value = item.quantity.toString();
+        (document.getElementById('supplierName') as HTMLInputElement).value = item.supplierName;
+        (document.getElementById('comment') as HTMLTextAreaElement).value = item.comments;
+        
+        document.getElementById('feedbackDisplay')!.innerHTML = "<p style='color: blue;'>Editing... Click 'Add' to save changes.</p>";
+    }
+}
+
 function displayInventoryList() {
     renderTable(inventory);
 }
@@ -118,9 +140,16 @@ function renderTable(items: InventoryItem[]) {
             <td>${item.stockStatus}</td>
             <td>${item.popularItem}</td>
             <td>${item.comments}</td>
-            <td><button onclick="alert('Update logic here')">Update</button></td>
+            <td>
+                <button onclick="prepareUpdate('${item.itemId}')">Update</button>
+                <button onclick="deleteItem('${item.itemId}')">Delete</button>
+            </td>
         </tr>`;
     });
     html += "</table>";
     output.innerHTML = html;
 }
+
+// Making the delete and update functions available globally so that they can be called from the HTML buttons
+(window as any).deleteItem = deleteItem;
+(window as any).prepareUpdate = prepareUpdate;

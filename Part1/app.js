@@ -67,6 +67,25 @@ window.onload = () => {
         });
     }
 };
+// Function for deleting an item from the list
+function deleteItem(id) {
+    inventory = inventory.filter(item => item.itemId !== id);
+    displayInventoryList();
+    document.getElementById('feedbackDisplay').innerHTML = "<p style='color: orange;'>Item deleted.</p>";
+}
+// Function for preparing an item for an update (filling the fields with the existing data, making it editable)
+function prepareUpdate(id) {
+    const item = inventory.find(i => i.itemId === id);
+    if (item) {
+        document.getElementById('itemId').value = item.itemId;
+        document.getElementById('itemName').value = item.itemName;
+        document.getElementById('price').value = item.price.toString();
+        document.getElementById('quantity').value = item.quantity.toString();
+        document.getElementById('supplierName').value = item.supplierName;
+        document.getElementById('comment').value = item.comments;
+        document.getElementById('feedbackDisplay').innerHTML = "<p style='color: blue;'>Editing... Click 'Add' to save changes.</p>";
+    }
+}
 function displayInventoryList() {
     renderTable(inventory);
 }
@@ -89,9 +108,15 @@ function renderTable(items) {
             <td>${item.stockStatus}</td>
             <td>${item.popularItem}</td>
             <td>${item.comments}</td>
-            <td><button onclick="alert('Update logic here')">Update</button></td>
+            <td>
+                <button onclick="prepareUpdate('${item.itemId}')">Update</button>
+                <button onclick="deleteItem('${item.itemId}')">Delete</button>
+            </td>
         </tr>`;
     });
     html += "</table>";
     output.innerHTML = html;
 }
+// Making the delete and update functions available globally so that they can be called from the HTML buttons
+window.deleteItem = deleteItem;
+window.prepareUpdate = prepareUpdate;
