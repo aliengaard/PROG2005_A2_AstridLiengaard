@@ -120,16 +120,51 @@ tr:hover {
 
 /* Making it possible to read from a mobile device */
 @media (max-width: 600px) {
-    #formSection {
-        margin: 10px; 
-        padding: 15px;
+    body {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch; 
     }
-    
+
     h1 {
-        font-size: 1.5rem; 
+        font-size: 1.5rem;
+        margin-top: 10px;
     }
-    
-    input, select, button {
-        font-size: 16px; 
+
+    .form-container, section {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        max-width: 100%; 
+        font-size: 16px; /* Forhindrer irriterende auto-zoom på iPhone */
+        padding: 12px;
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%; 
+        padding: 15px;
+        font-size: 18px;
+        margin: 5px 0;
+    }
+
+    /* Making it possible to scroll horizontally on the device, making it possible to see the long table */
+    #inventoryOutput {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        -webkit-overflow-scrolling: touch; 
+    }
+
+    table {
+        min-width: 600px; 
     }
 }
