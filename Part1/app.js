@@ -5,6 +5,13 @@
 let inventory = [];
 // Logic adding a new item 
 window.onload = () => {
+    // Getting saved data from localStorage, if it exists
+    const savedData = localStorage.getItem('inventoryData');
+    if (savedData) {
+        inventory = JSON.parse(savedData);
+        displayInventoryList();
+    }
+    // Getting references to buttons
     const addBtn = document.getElementById('addBtn');
     const searchBtn = document.getElementById('searchBtn');
     const saveUpdateBtn = document.getElementById('saveUpdateBtn');
@@ -116,6 +123,7 @@ function prepareUpdate(id) {
     }
 }
 function displayInventoryList() {
+    localStorage.setItem('inventoryData', JSON.stringify(inventory));
     renderTable(inventory);
 }
 function clearFields() {
