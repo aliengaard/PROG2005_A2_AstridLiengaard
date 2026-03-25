@@ -17,16 +17,28 @@ header {
 }
 
 /* Fields form */
-#formSection {
+.form-container {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     max-width: 500px;
-    margin: 0 auto 30px;
+    margin: 20px auto; /* Centrerer boksene med luft imellem */
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+/* Header Add Section */
+#addSection h2 {
+    color: #27ae60;
+    margin-top: 0;
+}
+
+/* Header Update Section */
+#updateSection h2 {
+    color: #f39c12;
+    margin-top: 0;
 }
 
 input, select, textarea {
@@ -56,21 +68,20 @@ button:hover {
 }
 
 #addBtn {
-    background-color: #27ae60; /* Grøn for 'Tilføj' */
+    background-color: #27ae60; 
     color: white;
 }
 
-#saveUpdateBtn {
-    background-color: #f39c12; /* Orange for 'Opdater' */
+#updateBtn {
+    background-color: #f39c12;
     color: white;
 }
 
 #searchBtn {
-    background-color: #3498db; /* Blå for 'Søg' */
+    background-color: #3498db;
     color: white;
 }
 
-/* Tabel styling */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -98,19 +109,6 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Delete-button in the list */
-td button {
-    background-color: #e74c3c; /* Rød for 'Slet' */
-    color: white;
-    padding: 5px 10px;
-    font-size: 12px;
-    margin-right: 5px;
-}
-
-/* Update-button in the list */
-td button:first-child {
-    background-color: #3498db; /* Blå for 'Rediger' */
-}
 
 /* Feedback messages */
 #feedbackDisplay {

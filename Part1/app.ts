@@ -28,8 +28,8 @@ window.onload = () => {
     }
     // Getting references to buttons
     const addBtn = document.getElementById('addBtn') as HTMLButtonElement;
+    const updateBtn = document.getElementById('updateBtn') as HTMLButtonElement;
     const searchBtn = document.getElementById('searchBtn') as HTMLButtonElement;
-    const saveUpdateBtn = document.getElementById('saveUpdateBtn');
     const showAllBtn = document.getElementById('showAllBtn') as HTMLButtonElement;
     const showPopularBtn = document.getElementById('showPopularBtn') as HTMLButtonElement;
 
@@ -37,15 +37,15 @@ window.onload = () => {
 if(addBtn){
 addBtn.addEventListener('click', () => {
     // Get values from fields
-    const idValue = (document.getElementById('itemId') as HTMLInputElement).value;
-    const nameValue = (document.getElementById('itemName') as HTMLInputElement).value;
-    const priceValue = (document.getElementById('price') as HTMLInputElement).value;
-    const quantityValue = (document.getElementById('quantity') as HTMLInputElement).value;
-    const supplierValue = (document.getElementById('supplierName') as HTMLInputElement).value;
-    const categoryValue = (document.getElementById('category') as HTMLSelectElement).value as InventoryItem['category'];
-    const statusValue = (document.getElementById('stockStatus') as HTMLSelectElement).value as InventoryItem['stockStatus'];
-    const popularValue = (document.getElementById('popularItem') as HTMLSelectElement).value as InventoryItem['popularItem'];
-    const commentsValue = (document.getElementById('comment') as HTMLTextAreaElement).value;
+    const idValue = (document.getElementById('add_itemId') as HTMLInputElement).value;
+    const nameValue = (document.getElementById('add_itemName') as HTMLInputElement).value;
+    const priceValue = (document.getElementById('add_price') as HTMLInputElement).value;
+    const quantityValue = (document.getElementById('add_quantity') as HTMLInputElement).value;
+    const supplierValue = (document.getElementById('add_supplierName') as HTMLInputElement).value;
+    const categoryValue = (document.getElementById('add_category') as HTMLSelectElement).value as InventoryItem['category'];
+    const statusValue = (document.getElementById('add_stockStatus') as HTMLSelectElement).value as InventoryItem['stockStatus'];
+    const popularValue = (document.getElementById('add_popularItem') as HTMLSelectElement).value as InventoryItem['popularItem'];
+    const commentsValue = (document.getElementById('add_comment') as HTMLTextAreaElement).value;
 
     // Validation: Check if ID is unique
     if (inventory.some(item => item.itemId === idValue)) {
@@ -86,49 +86,56 @@ addBtn.addEventListener('click', () => {
 });
 }
 
-// Event listener for the update button
-if (saveUpdateBtn) {
-    saveUpdateBtn.addEventListener('click', () => {
-        const idValue = (document.getElementById('itemId') as HTMLInputElement).value;
+// Event listener for updating
+if (updateBtn) {
+    updateBtn.addEventListener('click', () => {
+        const nameOnItem = (document.getElementById('update_itemName') as HTMLInputElement).value;
+        const item = inventory.find(i => i.itemName === nameOnItem);
         
-        // Finding the index of the item being updated in the inventory array
-        const index = inventory.findIndex(item => item.itemId === idValue);
-
-        if (index !== -1) {
             // Updating values in inventory array
-            inventory[index] = {
-                itemId: idValue,
-                itemName: (document.getElementById('itemName') as HTMLInputElement).value,
-                price: Number((document.getElementById('price') as HTMLInputElement).value),
-                quantity: Number((document.getElementById('quantity') as HTMLInputElement).value),
-                category: (document.getElementById('category') as HTMLSelectElement).value as InventoryItem['category'],
-                supplierName: (document.getElementById('supplierName') as HTMLInputElement).value,
-                stockStatus: (document.getElementById('stockStatus') as HTMLSelectElement).value as InventoryItem['stockStatus'],
-                popularItem: (document.getElementById('popularItem') as HTMLSelectElement).value as InventoryItem['popularItem'],
-                comments: (document.getElementById('comment') as HTMLTextAreaElement).value
-            };
+            if(item){
+                // Get the new values 
+                const newPrice = (document.getElementById('update_price') as HTMLInputElement).value;
+                const newQty = (document.getElementById('update_quantity') as HTMLInputElement).value;
+                const newSupp = (document.getElementById('update_supplierName') as HTMLInputElement).value;
+                const newComm = (document.getElementById('update_comment') as HTMLTextAreaElement).value;
+                const newCat = (document.getElementById('update_category') as HTMLSelectElement).value;
+                const newStat = (document.getElementById('update_stockStatus') as HTMLSelectElement).value;
+                const newPop = (document.getElementById('update_popularItem') as HTMLSelectElement).value;
 
-            // 1. Opdater tabellen så vi kan se ændringen
-            displayInventoryList();
-            
-            // 2. Skift knapperne tilbage til "Normal mode"
-            saveUpdateBtn.style.display = 'none';
-            document.getElementById('addBtn')!.style.display = 'inline-block';
-            
-            // 3. Gør ID-feltet skrivbart igen og tøm felterne
-            (document.getElementById('itemId') as HTMLInputElement).readOnly = false;
+                // Only updating values, if the fields are not empty
+                if (newPrice !== "") item.price = Number(newPrice);
+                if (newQty !== "") item.quantity = Number(newQty);
+                if (newSupp !== "") item.supplierName = newSupp;
+                if (newComm !== "") item.comments = newComm;
+                if (newCat !== "") item.category = newCat as any;
+                if (newStat !== "") item.stockStatus = newStat as any;
+                if (newPop !== "") item.popularItem = newPop as any;
+                
+                displayInventoryList();
+                
+            const feedback = document.getElementById('feedbackDisplay');
+            if (feedback) {
+                feedback.innerHTML = `<p style='color: green;'>Updated: ${nameOnItem}</p>`;
+            }
+
             clearFields(); 
 
-            document.getElementById('feedbackDisplay')!.innerHTML = "<p style='color: green;'>Item updated!</p>";
+        } else {
+            const feedback = document.getElementById('feedbackDisplay');
+            if (feedback) {
+                feedback.innerHTML = `<p style='color: red;'>Error: Item '${nameOnItem}' not found.</p>`;
+            }
         }
-    });
-}
-// Event listener for the search button
+    }); 
+} 
+    
+    // Event listener for the search button
     if (searchBtn) {
         searchBtn.addEventListener('click', () => {
         const term = (document.getElementById('searchInput') as HTMLInputElement).value.toLowerCase();
         const filtered = inventory.filter(i => i.itemName.toLowerCase().includes(term));
-        renderTable(filtered); // Vi bruger en hjælpefunktion til at tegne
+        renderTable(filtered); 
         });
     }
 
@@ -141,12 +148,11 @@ if (saveUpdateBtn) {
     }
 
     // Event listener for the show popular items button
-
     if (showPopularBtn) {
         showPopularBtn.addEventListener('click', () => {
             const popular = inventory.filter(i => i.popularItem === 'Yes');
             renderTable(popular);
-            document.getElementById('feedbackDisplay')!.innerHTML = "<p>Showing popular items ⭐</p>";
+            document.getElementById('feedbackDisplay')!.innerHTML = "<p>Showing popular items</p>";
         });
     }
 };
@@ -165,25 +171,18 @@ function deleteItem(itemName: string) {
     }
 }
 
-// Function for preparing an item for an update (filling the fields with the existing data, making it editable)
+// Function for updating an item
 function prepareUpdate(name: string) {
     const item = inventory.find(i => i.itemName === name);
     if (item) {
-        (document.getElementById('itemId') as HTMLInputElement).value = item.itemId;
-        // ID is unique and should not be changed, so I make it read-only
-        (document.getElementById('itemId') as HTMLInputElement).readOnly = true; 
-        (document.getElementById('itemName') as HTMLInputElement).value = item.itemName;
-        (document.getElementById('price') as HTMLInputElement).value = item.price.toString();
-        (document.getElementById('quantity') as HTMLInputElement).value = item.quantity.toString();
-        (document.getElementById('category') as HTMLSelectElement).value = item.category;
-        (document.getElementById('stockStatus') as HTMLSelectElement).value = item.stockStatus;
-        (document.getElementById('popularItem') as HTMLSelectElement).value = item.popularItem;
-        (document.getElementById('supplierName') as HTMLInputElement).value = item.supplierName;
-        (document.getElementById('comment') as HTMLTextAreaElement).value = item.comments;
-        
-        // Changing from add button to save update button
-        document.getElementById('addBtn')!.style.display = 'none';
-        document.getElementById('saveUpdateBtn')!.style.display = 'inline-block';
+        (document.getElementById('update_itemName') as HTMLInputElement).value = item.itemName;
+        (document.getElementById('update_price') as HTMLInputElement).value = item.price.toString();
+        (document.getElementById('update_quantity') as HTMLInputElement).value = item.quantity.toString();
+        (document.getElementById('update_category') as HTMLSelectElement).value = item.category;
+        (document.getElementById('update_stockStatus') as HTMLSelectElement).value = item.stockStatus;
+        (document.getElementById('update_popularItem') as HTMLSelectElement).value = item.popularItem;
+        (document.getElementById('update_supplierName') as HTMLInputElement).value = item.supplierName;
+        (document.getElementById('update_comment') as HTMLTextAreaElement).value = item.comments;
 
         document.getElementById('feedbackDisplay')!.innerHTML = "<p style='color: blue;'>Editing... Click 'Save changes' to save changes.</p>";
     }
@@ -195,12 +194,20 @@ function displayInventoryList() {
 }
 
 function clearFields() {
-    (document.getElementById('itemId') as HTMLInputElement).value = "";
-    (document.getElementById('itemName') as HTMLInputElement).value = "";
-    (document.getElementById('price') as HTMLInputElement).value = "";
-    (document.getElementById('quantity') as HTMLInputElement).value = "";
-    (document.getElementById('supplierName') as HTMLInputElement).value = "";
-    (document.getElementById('comment') as HTMLTextAreaElement).value = "";
+    // Empty Add-section
+    (document.getElementById('add_itemId') as HTMLInputElement).value = "";
+    (document.getElementById('add_itemName') as HTMLInputElement).value = "";
+    (document.getElementById('add_price') as HTMLInputElement).value = "";
+    (document.getElementById('add_quantity') as HTMLInputElement).value = "";
+    (document.getElementById('add_supplierName') as HTMLInputElement).value = "";
+    (document.getElementById('add_comment') as HTMLTextAreaElement).value = "";
+    
+    // Empty Update-section
+    (document.getElementById('update_itemName') as HTMLInputElement).value = "";
+    (document.getElementById('update_price') as HTMLInputElement).value = "";
+    (document.getElementById('update_quantity') as HTMLInputElement).value = "";
+    (document.getElementById('update_supplierName') as HTMLInputElement).value = "";
+    (document.getElementById('update_comment') as HTMLTextAreaElement).value = "";
 }
 
 function renderTable(items: InventoryItem[]) {
@@ -241,7 +248,6 @@ function renderTable(items: InventoryItem[]) {
             <td>${item.popularItem}</td>
             <td>${item.comments}</td>
             <td>
-                <button onclick="prepareUpdate('${item.itemName}')">Update</button>
                 <button onclick="deleteItem('${item.itemName}')">Delete</button>
             </td>
         </tr>`;
@@ -249,7 +255,6 @@ function renderTable(items: InventoryItem[]) {
     html += "</tbody></table>";
     output.innerHTML = html;
 }
-
 // Making the delete and update functions available globally so that they can be called from the HTML buttons
 (window as any).deleteItem = deleteItem;
 (window as any).prepareUpdate = prepareUpdate;

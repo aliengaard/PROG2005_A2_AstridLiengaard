@@ -12,45 +12,13 @@
 </head>
 <body>
     <header>
-        <h1>Inventory Management System</h1>
-    </header>
-    <main>
-        <div id="feedbackDisplay"></div>
-        <!-- Section where new items can be added. 
-         Including all fields and a button adding the item-->
-        <section id ="formSection">
-            <input type="text" id="itemId" placeholder="Item ID (Unique)">
-            <input type="text" id="itemName" placeholder="Product Name">
-            <select id="category">
-                <option value="Electronics">Electronics</option>
-                <option value="Furniture">Furniture</option>
-                <option value="Tools">Tools</option>
-            </select>
-            <input type="number" id="quantity" placeholder="Quantity">
-            <input type="number" id="price" placeholder="Price">
-            <input type="text" id="supplierName" placeholder="Supplier">
-            <select id="stockStatus">
-                <option value="In Stock">In Stock</option>
-                <option value="Low Stock">Low Stock</option>
-            </select>
-            <select id="popularItem">
-                <option value="No">Popular: No</option>
-                <option value="Yes">Popular: Yes</option>
-            </select>
-            <textarea id="comment" placeholder="Comments"></textarea>
-            
-            <button id="addBtn">Add to Inventory</button> 
-            <button id="saveUpdateBtn" style="display: none;">Save Changes</button>
-        </section>
-        
-        <hr>
-
-        <h2>Current Inventory</h2>
+        <h1>Current Inventory</h1>
 
         <!-- Section for searching inventory items -->
         <section id="search-section">
             <input type="text" id="searchInput" placeholder="Search by name...">
             <button id="searchBtn">Search</button>
+        <hr>  
             <button id="showAllBtn">Show All Items</button>
             <button id="showPopularBtn"> Show Popular Items</button>
         </section>
@@ -60,6 +28,62 @@
             <div id="inventoryOutput">
                 </div>
         </section>
+
+    <hr>
+    <main>
+        <div id="feedbackDisplay"></div>
+        <!-- Section where new items can be added. 
+         Including all fields and a button adding the item-->
+        <section id ="addSection" class="form-container">
+            <h2>Add a new item</h2>
+            <input type="text" id="add_itemId" placeholder="Item ID (Unique)">
+            <input type="text" id="add_itemName" placeholder="Product Name">
+            <select id="add_category">
+                <option value="Electronics">Electronics</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Tools">Tools</option>
+            </select>
+            <input type="number" id="add_quantity" placeholder="Quantity">
+            <input type="number" id="add_price" placeholder="Price">
+            <input type="text" id="add_supplierName" placeholder="Supplier">
+            <select id="add_stockStatus">
+                <option value="In Stock">In Stock</option>
+                <option value="Low Stock">Low Stock</option>
+            </select>
+            <select id="add_popularItem">
+                <option value="No">Popular: No</option>
+                <option value="Yes">Popular: Yes</option>
+            </select>
+            <textarea id="add_comment" placeholder="Comments"></textarea>
+            <button id="addBtn">Add to Inventory</button>
+        </section>
+
+        <!-- Section where items can be updated. 
+         Including all fields and a button saving the item-->
+        <section id="updateSection" class="form-container">
+            <h2>Update an item</h2>
+            <input type="text" id="update_itemName" placeholder="Enter Product Name to find item">
+            <select id="update_category">
+                <option value="Electronics">Electronics</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Tools">Tools</option>
+            </select>
+            <input type="number" id="update_quantity" placeholder="New Quantity">
+            <input type="number" id="update_price" placeholder="New Price">
+            <input type="text" id="update_supplierName" placeholder="New Supplier">
+            <select id="update_stockStatus">
+                <option value="In Stock">In Stock</option>
+                <option value="Low Stock">Low Stock</option>
+            </select>
+            <select id="update_popularItem">
+                <option value="No">Popular: No</option>
+                <option value="Yes">Popular: Yes</option>
+            </select>
+            <textarea id="update_comment" placeholder="New Comments"></textarea>
+            <button id="updateBtn">Update Item</button>
+        </section>
+
+        
     </main>
 <script src="app.js"></script>
 </body>

@@ -13,23 +13,23 @@ window.onload = () => {
     }
     // Getting references to buttons
     const addBtn = document.getElementById('addBtn');
+    const updateBtn = document.getElementById('updateBtn');
     const searchBtn = document.getElementById('searchBtn');
-    const saveUpdateBtn = document.getElementById('saveUpdateBtn');
     const showAllBtn = document.getElementById('showAllBtn');
     const showPopularBtn = document.getElementById('showPopularBtn');
     // Event listener for the Add button
     if (addBtn) {
         addBtn.addEventListener('click', () => {
             // Get values from fields
-            const idValue = document.getElementById('itemId').value;
-            const nameValue = document.getElementById('itemName').value;
-            const priceValue = document.getElementById('price').value;
-            const quantityValue = document.getElementById('quantity').value;
-            const supplierValue = document.getElementById('supplierName').value;
-            const categoryValue = document.getElementById('category').value;
-            const statusValue = document.getElementById('stockStatus').value;
-            const popularValue = document.getElementById('popularItem').value;
-            const commentsValue = document.getElementById('comment').value;
+            const idValue = document.getElementById('add_itemId').value;
+            const nameValue = document.getElementById('add_itemName').value;
+            const priceValue = document.getElementById('add_price').value;
+            const quantityValue = document.getElementById('add_quantity').value;
+            const supplierValue = document.getElementById('add_supplierName').value;
+            const categoryValue = document.getElementById('add_category').value;
+            const statusValue = document.getElementById('add_stockStatus').value;
+            const popularValue = document.getElementById('add_popularItem').value;
+            const commentsValue = document.getElementById('add_comment').value;
             // Validation: Check if ID is unique
             if (inventory.some(item => item.itemId === idValue)) {
                 document.getElementById('feedbackDisplay').innerHTML =
@@ -62,34 +62,48 @@ window.onload = () => {
             displayInventoryList();
         });
     }
-    // Event listener for the update button
-    if (saveUpdateBtn) {
-        saveUpdateBtn.addEventListener('click', () => {
-            const idValue = document.getElementById('itemId').value;
-            // Finding the index of the item being updated in the inventory array
-            const index = inventory.findIndex(item => item.itemId === idValue);
-            if (index !== -1) {
-                // Updating values in inventory array
-                inventory[index] = {
-                    itemId: idValue,
-                    itemName: document.getElementById('itemName').value,
-                    price: Number(document.getElementById('price').value),
-                    quantity: Number(document.getElementById('quantity').value),
-                    category: document.getElementById('category').value,
-                    supplierName: document.getElementById('supplierName').value,
-                    stockStatus: document.getElementById('stockStatus').value,
-                    popularItem: document.getElementById('popularItem').value,
-                    comments: document.getElementById('comment').value
-                };
-                // 1. Opdater tabellen så vi kan se ændringen
+    // Event listener for updating
+    if (updateBtn) {
+        updateBtn.addEventListener('click', () => {
+            const nameOnItem = document.getElementById('update_itemName').value;
+            const item = inventory.find(i => i.itemName === nameOnItem);
+            // Updating values in inventory array
+            if (item) {
+                // Get the new values 
+                const newPrice = document.getElementById('update_price').value;
+                const newQty = document.getElementById('update_quantity').value;
+                const newSupp = document.getElementById('update_supplierName').value;
+                const newComm = document.getElementById('update_comment').value;
+                const newCat = document.getElementById('update_category').value;
+                const newStat = document.getElementById('update_stockStatus').value;
+                const newPop = document.getElementById('update_popularItem').value;
+                // Only updating values, if the fields are not empty
+                if (newPrice !== "")
+                    item.price = Number(newPrice);
+                if (newQty !== "")
+                    item.quantity = Number(newQty);
+                if (newSupp !== "")
+                    item.supplierName = newSupp;
+                if (newComm !== "")
+                    item.comments = newComm;
+                if (newCat !== "")
+                    item.category = newCat;
+                if (newStat !== "")
+                    item.stockStatus = newStat;
+                if (newPop !== "")
+                    item.popularItem = newPop;
                 displayInventoryList();
-                // 2. Skift knapperne tilbage til "Normal mode"
-                saveUpdateBtn.style.display = 'none';
-                document.getElementById('addBtn').style.display = 'inline-block';
-                // 3. Gør ID-feltet skrivbart igen og tøm felterne
-                document.getElementById('itemId').readOnly = false;
+                const feedback = document.getElementById('feedbackDisplay');
+                if (feedback) {
+                    feedback.innerHTML = `<p style='color: green;'>Updated: ${nameOnItem}</p>`;
+                }
                 clearFields();
-                document.getElementById('feedbackDisplay').innerHTML = "<p style='color: green;'>Item updated!</p>";
+            }
+            else {
+                const feedback = document.getElementById('feedbackDisplay');
+                if (feedback) {
+                    feedback.innerHTML = `<p style='color: red;'>Error: Item '${nameOnItem}' not found.</p>`;
+                }
             }
         });
     }
@@ -98,7 +112,7 @@ window.onload = () => {
         searchBtn.addEventListener('click', () => {
             const term = document.getElementById('searchInput').value.toLowerCase();
             const filtered = inventory.filter(i => i.itemName.toLowerCase().includes(term));
-            renderTable(filtered); // Vi bruger en hjælpefunktion til at tegne
+            renderTable(filtered);
         });
     }
     // Event listener for the show all items button
@@ -113,7 +127,7 @@ window.onload = () => {
         showPopularBtn.addEventListener('click', () => {
             const popular = inventory.filter(i => i.popularItem === 'Yes');
             renderTable(popular);
-            document.getElementById('feedbackDisplay').innerHTML = "<p>Showing popular items ⭐</p>";
+            document.getElementById('feedbackDisplay').innerHTML = "<p>Showing popular items</p>";
         });
     }
 };
@@ -129,24 +143,18 @@ function deleteItem(itemName) {
         feedback.innerHTML = `<div style="color: orange;">Item <strong>${itemName}</strong> was successfully deleted.</div>`;
     }
 }
-// Function for preparing an item for an update (filling the fields with the existing data, making it editable)
+// Function for updating an item
 function prepareUpdate(name) {
     const item = inventory.find(i => i.itemName === name);
     if (item) {
-        document.getElementById('itemId').value = item.itemId;
-        // ID is unique and should not be changed, so I make it read-only
-        document.getElementById('itemId').readOnly = true;
-        document.getElementById('itemName').value = item.itemName;
-        document.getElementById('price').value = item.price.toString();
-        document.getElementById('quantity').value = item.quantity.toString();
-        document.getElementById('category').value = item.category;
-        document.getElementById('stockStatus').value = item.stockStatus;
-        document.getElementById('popularItem').value = item.popularItem;
-        document.getElementById('supplierName').value = item.supplierName;
-        document.getElementById('comment').value = item.comments;
-        // Changing from add button to save update button
-        document.getElementById('addBtn').style.display = 'none';
-        document.getElementById('saveUpdateBtn').style.display = 'inline-block';
+        document.getElementById('update_itemName').value = item.itemName;
+        document.getElementById('update_price').value = item.price.toString();
+        document.getElementById('update_quantity').value = item.quantity.toString();
+        document.getElementById('update_category').value = item.category;
+        document.getElementById('update_stockStatus').value = item.stockStatus;
+        document.getElementById('update_popularItem').value = item.popularItem;
+        document.getElementById('update_supplierName').value = item.supplierName;
+        document.getElementById('update_comment').value = item.comments;
         document.getElementById('feedbackDisplay').innerHTML = "<p style='color: blue;'>Editing... Click 'Save changes' to save changes.</p>";
     }
 }
@@ -155,12 +163,19 @@ function displayInventoryList() {
     renderTable(inventory);
 }
 function clearFields() {
-    document.getElementById('itemId').value = "";
-    document.getElementById('itemName').value = "";
-    document.getElementById('price').value = "";
-    document.getElementById('quantity').value = "";
-    document.getElementById('supplierName').value = "";
-    document.getElementById('comment').value = "";
+    // Empty Add-section
+    document.getElementById('add_itemId').value = "";
+    document.getElementById('add_itemName').value = "";
+    document.getElementById('add_price').value = "";
+    document.getElementById('add_quantity').value = "";
+    document.getElementById('add_supplierName').value = "";
+    document.getElementById('add_comment').value = "";
+    // Empty Update-section
+    document.getElementById('update_itemName').value = "";
+    document.getElementById('update_price').value = "";
+    document.getElementById('update_quantity').value = "";
+    document.getElementById('update_supplierName').value = "";
+    document.getElementById('update_comment').value = "";
 }
 function renderTable(items) {
     const output = document.getElementById('inventoryOutput');
@@ -198,7 +213,6 @@ function renderTable(items) {
             <td>${item.popularItem}</td>
             <td>${item.comments}</td>
             <td>
-                <button onclick="prepareUpdate('${item.itemName}')">Update</button>
                 <button onclick="deleteItem('${item.itemName}')">Delete</button>
             </td>
         </tr>`;
