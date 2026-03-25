@@ -146,7 +146,7 @@ function prepareUpdate(id: string) {
         document.getElementById('addBtn')!.style.display = 'none';
         document.getElementById('saveUpdateBtn')!.style.display = 'inline-block';
 
-        document.getElementById('feedbackDisplay')!.innerHTML = "<p style='color: blue;'>Editing... Click 'Add' to save changes.</p>";
+        document.getElementById('feedbackDisplay')!.innerHTML = "<p style='color: blue;'>Editing... Click 'Save changes' to save changes.</p>";
     }
 }
 
@@ -171,7 +171,23 @@ function renderTable(items: InventoryItem[]) {
         return;
     }
     
-    let html = "<table border='1'><tr><th>ID</th><th>Name</th><th>Category</th><th>Qty</th><th>Price</th><th>Actions</th></tr>";
+    let html = `
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Supplier</th>
+                <th>Status</th>
+                <th>Popular</th>
+                <th>Comments</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>`;
     
     items.forEach(item => {
         html += `<tr>
@@ -190,7 +206,7 @@ function renderTable(items: InventoryItem[]) {
             </td>
         </tr>`;
     });
-    html += "</table>";
+    html += "</tbody></table>";
     output.innerHTML = html;
 }
 

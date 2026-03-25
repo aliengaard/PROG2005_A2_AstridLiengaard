@@ -112,7 +112,7 @@ function prepareUpdate(id) {
         // Changing from add button to save update button
         document.getElementById('addBtn').style.display = 'none';
         document.getElementById('saveUpdateBtn').style.display = 'inline-block';
-        document.getElementById('feedbackDisplay').innerHTML = "<p style='color: blue;'>Editing... Click 'Add' to save changes.</p>";
+        document.getElementById('feedbackDisplay').innerHTML = "<p style='color: blue;'>Editing... Click 'Save changes' to save changes.</p>";
     }
 }
 function displayInventoryList() {
@@ -133,7 +133,23 @@ function renderTable(items) {
         output.innerHTML = "<p>No items found.</p>";
         return;
     }
-    let html = "<table border='1'><tr><th>ID</th><th>Name</th><th>Category</th><th>Qty</th><th>Price</th><th>Actions</th></tr>";
+    let html = `
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Supplier</th>
+                <th>Status</th>
+                <th>Popular</th>
+                <th>Comments</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>`;
     items.forEach(item => {
         html += `<tr>
             <td>${item.itemId}</td>
@@ -151,7 +167,7 @@ function renderTable(items) {
             </td>
         </tr>`;
     });
-    html += "</table>";
+    html += "</tbody></table>";
     output.innerHTML = html;
 }
 // Making the delete and update functions available globally so that they can be called from the HTML buttons

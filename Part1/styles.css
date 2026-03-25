@@ -119,3 +119,19 @@ td button:first-child {
     margin-bottom: 10px;
     min-height: 24px;
 }
+
+/* Making it possible to read from a mobile device */
+@media (max-width: 600px) {
+    #formSection {
+        margin: 10px; /* Mindre margin så der er plads til felterne */
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.5rem; /* Mindre tekst på overskriften */
+    }
+    
+    input, select, button {
+        font-size: 16px; /* Gør felterne lidt større, så de er nemmere at ramme med en finger */
+    }
+}
