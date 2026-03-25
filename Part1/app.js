@@ -15,6 +15,8 @@ window.onload = () => {
     const addBtn = document.getElementById('addBtn');
     const searchBtn = document.getElementById('searchBtn');
     const saveUpdateBtn = document.getElementById('saveUpdateBtn');
+    const showAllBtn = document.getElementById('showAllBtn');
+    const showPopularBtn = document.getElementById('showPopularBtn');
     // Event listener for the Add button
     if (addBtn) {
         addBtn.addEventListener('click', () => {
@@ -99,21 +101,47 @@ window.onload = () => {
             renderTable(filtered); // Vi bruger en hjælpefunktion til at tegne
         });
     }
+    // Event listener for the show all items button
+    if (showAllBtn) {
+        showAllBtn.addEventListener('click', () => {
+            renderTable(inventory);
+            document.getElementById('feedbackDisplay').innerHTML = "<p>Showing all items.</p>";
+        });
+    }
+    // Event listener for the show popular items button
+    if (showPopularBtn) {
+        showPopularBtn.addEventListener('click', () => {
+            const popular = inventory.filter(i => i.popularItem === 'Yes');
+            renderTable(popular);
+            document.getElementById('feedbackDisplay').innerHTML = "<p>Showing popular items ⭐</p>";
+        });
+    }
 };
-// Function for deleting an item from the list
-function deleteItem(id) {
-    inventory = inventory.filter(item => item.itemId !== id);
-    displayInventoryList();
-    document.getElementById('feedbackDisplay').innerHTML = "<p style='color: orange;'>Item deleted.</p>";
+// Function for deleting an item from the list based on name
+function deleteItem(itemName) {
+    // Confirmation prompt
+    const confirmDelete = confirm(`Are you sure you want to delete: ${itemName}?`);
+    if (confirmDelete) {
+        inventory = inventory.filter(item => item.itemName !== itemName);
+        displayInventoryList();
+        // InnerHTML feedback for the user
+        const feedback = document.getElementById('feedbackDisplay');
+        feedback.innerHTML = `<div style="color: orange;">Item <strong>${itemName}</strong> was successfully deleted.</div>`;
+    }
 }
 // Function for preparing an item for an update (filling the fields with the existing data, making it editable)
-function prepareUpdate(id) {
-    const item = inventory.find(i => i.itemId === id);
+function prepareUpdate(name) {
+    const item = inventory.find(i => i.itemName === name);
     if (item) {
         document.getElementById('itemId').value = item.itemId;
+        // ID is unique and should not be changed, so I make it read-only
+        document.getElementById('itemId').readOnly = true;
         document.getElementById('itemName').value = item.itemName;
         document.getElementById('price').value = item.price.toString();
         document.getElementById('quantity').value = item.quantity.toString();
+        document.getElementById('category').value = item.category;
+        document.getElementById('stockStatus').value = item.stockStatus;
+        document.getElementById('popularItem').value = item.popularItem;
         document.getElementById('supplierName').value = item.supplierName;
         document.getElementById('comment').value = item.comments;
         // Changing from add button to save update button
@@ -170,8 +198,8 @@ function renderTable(items) {
             <td>${item.popularItem}</td>
             <td>${item.comments}</td>
             <td>
-                <button onclick="prepareUpdate('${item.itemId}')">Update</button>
-                <button onclick="deleteItem('${item.itemId}')">Delete</button>
+                <button onclick="prepareUpdate('${item.itemName}')">Update</button>
+                <button onclick="deleteItem('${item.itemName}')">Delete</button>
             </td>
         </tr>`;
     });
