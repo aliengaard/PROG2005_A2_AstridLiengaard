@@ -1,3 +1,7 @@
 /* Author: Astrid Liengaard Nielsen 
    Student ID: 25037591
    Assessment 2: Part 1*/ 
+
+.hidden {
+    display: none !important;
+}

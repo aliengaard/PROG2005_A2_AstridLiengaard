@@ -7,6 +7,7 @@ let inventory = [];
 window.onload = () => {
     const addBtn = document.getElementById('addBtn');
     const searchBtn = document.getElementById('searchBtn');
+    const saveUpdateBtn = document.getElementById('saveUpdateBtn');
     // Event listener for the Add button
     if (addBtn) {
         addBtn.addEventListener('click', () => {
@@ -48,17 +49,42 @@ window.onload = () => {
             document.getElementById('feedbackDisplay').innerHTML =
                 `<p style='color: green;'>Added: ${nameValue}</p>`;
             // Clear form fields after adding, so that new items can be added 
-            document.getElementById('itemId').value = '';
-            document.getElementById('itemName').value = '';
-            document.getElementById('price').value = '';
-            document.getElementById('quantity').value = '';
-            document.getElementById('supplierName').value = '';
-            document.getElementById('stockStatus').value = 'In Stock';
-            document.getElementById('popularItem').value = 'No';
-            document.getElementById('comment').value = '';
+            clearFields();
             displayInventoryList();
         });
     }
+    // Event listener for the update button
+    if (saveUpdateBtn) {
+        saveUpdateBtn.addEventListener('click', () => {
+            const idValue = document.getElementById('itemId').value;
+            // Finding the index of the item being updated in the inventory array
+            const index = inventory.findIndex(item => item.itemId === idValue);
+            if (index !== -1) {
+                // Updating values in inventory array
+                inventory[index] = {
+                    itemId: idValue,
+                    itemName: document.getElementById('itemName').value,
+                    price: Number(document.getElementById('price').value),
+                    quantity: Number(document.getElementById('quantity').value),
+                    category: document.getElementById('category').value,
+                    supplierName: document.getElementById('supplierName').value,
+                    stockStatus: document.getElementById('stockStatus').value,
+                    popularItem: document.getElementById('popularItem').value,
+                    comments: document.getElementById('comment').value
+                };
+                // 1. Opdater tabellen så vi kan se ændringen
+                displayInventoryList();
+                // 2. Skift knapperne tilbage til "Normal mode"
+                saveUpdateBtn.style.display = 'none';
+                document.getElementById('addBtn').style.display = 'inline-block';
+                // 3. Gør ID-feltet skrivbart igen og tøm felterne
+                document.getElementById('itemId').readOnly = false;
+                clearFields();
+                document.getElementById('feedbackDisplay').innerHTML = "<p style='color: green;'>Item updated!</p>";
+            }
+        });
+    }
+    // Event listener for the search button
     if (searchBtn) {
         searchBtn.addEventListener('click', () => {
             const term = document.getElementById('searchInput').value.toLowerCase();
@@ -83,11 +109,22 @@ function prepareUpdate(id) {
         document.getElementById('quantity').value = item.quantity.toString();
         document.getElementById('supplierName').value = item.supplierName;
         document.getElementById('comment').value = item.comments;
+        // Changing from add button to save update button
+        document.getElementById('addBtn').style.display = 'none';
+        document.getElementById('saveUpdateBtn').style.display = 'inline-block';
         document.getElementById('feedbackDisplay').innerHTML = "<p style='color: blue;'>Editing... Click 'Add' to save changes.</p>";
     }
 }
 function displayInventoryList() {
     renderTable(inventory);
+}
+function clearFields() {
+    document.getElementById('itemId').value = "";
+    document.getElementById('itemName').value = "";
+    document.getElementById('price').value = "";
+    document.getElementById('quantity').value = "";
+    document.getElementById('supplierName').value = "";
+    document.getElementById('comment').value = "";
 }
 function renderTable(items) {
     const output = document.getElementById('inventoryOutput');
