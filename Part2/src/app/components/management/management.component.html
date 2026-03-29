@@ -1,1 +1,189 @@
-<p>management works!</p>
+<div class="management-wrapper">
+  <h2>Inventory Management</h2>
+
+  <div *ngIf="feedbackMessage" 
+       [ngClass]="{'error-text': isError, 'success-text': !isError}" 
+       class="feedback-box">
+    {{ feedbackMessage }}
+  </div>
+
+  <div class="management-grid">
+    
+    <section class="card add-card">
+      <h3>Add New Item</h3>
+      <div class="form-container">
+        
+        <div class="field">
+          <label>Item ID:</label>
+          <input [(ngModel)]="newItem.itemId" placeholder="Unique ID">
+        </div>
+
+        <div class="field">
+          <label>Product Name:</label>
+          <input [(ngModel)]="newItem.itemName" placeholder="Full name">
+        </div>
+
+        <div class="field">
+          <label>Category:</label>
+          <select [(ngModel)]="newItem.category">
+            <option value="Electronics">Electronics</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Tools">Tools</option>
+            <option value="Miscellaneous">Miscellaneous</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Price (kr):</label>
+          <input type="number" [(ngModel)]="newItem.price">
+        </div>
+
+        <div class="field">
+          <label>Quantity:</label>
+          <input type="number" [(ngModel)]="newItem.quantity">
+        </div>
+
+        <div class="field">
+          <label>Supplier:</label>
+          <input type="text" [(ngModel)]="newItem.supplierName" placeholder="Supplier name">
+        </div>
+
+        <div class="field">
+          <label>Stock Status:</label>
+          <select [(ngModel)]="newItem.stockStatus">
+            <option value="In Stock">In Stock</option>
+            <option value="Low Stock">Low Stock</option>
+            <option value="Out of Stock">Out of Stock</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Popular Item:</label>
+          <select [(ngModel)]="newItem.popularItem">
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </div>
+
+        <div class="field full-width">
+          <label>Comments:</label>
+          <textarea [(ngModel)]="newItem.comments" placeholder="Additional notes..."></textarea>
+        </div>
+
+        <button class="btn-primary" (click)="saveItem()">Add to System</button>
+      </div>
+    </section>
+
+    <section class="card update-card">
+      <h3>Update Existing Item</h3>
+      
+      <div class="update-step">
+        <p class="step-label">1. Identify item to update</p>
+        <div class="field">
+          <label>Name of item you would like to update:</label>
+          <input [(ngModel)]="newItem.itemName" placeholder="Enter exact product name...">
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="update-step">
+        <p class="step-label">2. Fill in the fields you wish to change</p>
+        <small class="hint">Leave empty or 0 to keep current values.</small>
+        
+        <div class="input-grid">
+          <div class="field">
+            <label>New Category:</label>
+            <select [(ngModel)]="newItem.category">
+              <option value="">-- No change --</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Tools">Tools</option>
+              <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>New Price:</label>
+            <input type="number" [(ngModel)]="newItem.price">
+          </div>
+
+          <div class="field">
+            <label>New Quantity:</label>
+            <input type="number" [(ngModel)]="newItem.quantity">
+          </div>
+
+          <div class="field">
+            <label>New Supplier:</label>
+            <input type="text" [(ngModel)]="newItem.supplierName">
+          </div>
+
+          <div class="field">
+            <label>New Status:</label>
+            <select [(ngModel)]="newItem.stockStatus">
+              <option value="">-- No change --</option>
+              <option value="In Stock">In Stock</option>
+              <option value="Low Stock">Low Stock</option>
+              <option value="Out of Stock">Out of Stock</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>New Popularity:</label>
+            <select [(ngModel)]="newItem.popularItem">
+              <option value="">-- No change --</option>
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+
+          <div class="field full-width">
+            <label>New Comments:</label>
+            <textarea [(ngModel)]="newItem.comments" placeholder="Update notes..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-secondary" (click)="updateItem()">Apply Updates</button>
+    </section>
+
+  </div>
+
+  <hr class="section-divider">
+
+  <section class="table-section">
+    <h3>Current Inventory</h3>
+    <div class="table-container">
+      <table class="inventory-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Supplier</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items">
+            <td>{{ item.itemId }}</td>
+            <td><strong>{{ item.itemName }}</strong></td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.price }} kr.</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.supplierName }}</td>
+            <td>{{ item.stockStatus }}</td>
+            <td>
+              <button class="btn-danger" (click)="deleteItem(item.itemName)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
